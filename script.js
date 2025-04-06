@@ -5,7 +5,7 @@ const centerCoordinates = [18.477983, 73.890418];
 window.onload = function() {
     // Initialize live traffic map (left)
     const liveMap = tomtom.map({
-        key: 'j1XgVlO5541Ns9LAE7kLF8fSAZfcikfh',
+        key: 'Gg70C3AYStbvcFnYqVxnTvDBSx2p7kgG',
         container: 'liveTrafficMap',
         center: centerCoordinates,
         zoom: 15
