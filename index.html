@@ -18,19 +18,33 @@
 </header>
 
 <div class="container">
+
+    <!-- Left Panel -->
     <div class="map-section">
         <h2>Live Traffic View</h2>
-        <div id="liveMap" class="map-box"></div> <!-- FIXED ID -->
+        <div id="liveMap" class="map-box"></div>
     </div>
 
+    <!-- Right Panel -->
     <div class="map-section">
         <h2>Simulation Playground</h2>
+
+        <!-- Toolbox to drag-drop obstacles -->
+        <div class="toolbox">
+            <h3>Drag Obstacles</h3>
+            <img src="assets/cone-icon.png" draggable="true" class="toolbox-item" data-type="cone">
+            <img src="assets/accident-icon.png" draggable="true" class="toolbox-item" data-type="accident">
+        </div>
+
+        <!-- Simulation Map -->
         <div id="simulationMap" class="map-box"></div>
+
         <div class="button-group">
-            <button onclick="suggestTrafficSolutions()">Suggest</button> <!-- FIXED function name -->
-            <button onclick="clearSimulation()">Clear Suggestions</button> <!-- FIXED function name -->
+            <button onclick="suggestTrafficSolutions()">Suggest</button>
+            <button onclick="clearSimulation()">Clear</button>
         </div>
     </div>
+
 </div>
 
 <!-- Leaflet JS -->
