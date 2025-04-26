@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RUSH - Traffic AI Assistant</title>
+    <title>RUSH - Real-time Urban Smart Helper</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/684/684908.png" type="image/x-icon">
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- TomTom Maps SDK -->
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
-
 <body>
 
 <header>
@@ -23,20 +20,15 @@
 <div class="container">
     <div class="map-section">
         <h2>Live Traffic View</h2>
-        <div id="liveTrafficMap" class="map-box"></div>
+        <div id="liveMap" class="map-box"></div>
     </div>
 
     <div class="map-section">
-        <h2>Simulation Playground</h2>
-        <div class="drag-panel">
-            <span>Drag Obstacles:</span>
-            <img src="https://cdn-icons-png.flaticon.com/512/1973/1973807.png" draggable="true" class="drag-item" id="block1" alt="Barrier">
-            <img src="https://cdn-icons-png.flaticon.com/512/484/484662.png" draggable="true" class="drag-item" id="block2" alt="Cone">
-        </div>
-        <div id="simulationMap" class="map-box"></div>
+        <h2>Optimized Traffic Suggestion</h2>
+        <div id="optimizedMap" class="map-box"></div>
         <div class="button-group">
-            <button onclick="suggestSolutions()">Suggest</button>
-            <button onclick="clearSuggestions()">Clear</button>
+            <button onclick="suggestOptimizedRoute()">Suggest</button>
+            <button onclick="clearRoutes()">Clear</button>
         </div>
     </div>
 </div>
