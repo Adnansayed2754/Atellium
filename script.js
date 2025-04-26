@@ -1,51 +1,59 @@
+// Insert your TomTom API key below
+const apiKey = "Gg70C3AYStbvcFnYqVxnTvDBSx2p7kgG";
+
+// Define map center
+const puneCenter = [18.4775, 73.8910]; 
+
 // Initialize Live Traffic Map
-var liveMap = L.map('liveTrafficMap').setView([18.4775, 73.8925], 16);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data © OpenStreetMap contributors'
-}).addTo(liveMap);
-
-// Initialize Simulation Map
-var simulationMap = L.map('simulationMap').setView([18.4775, 73.8925], 16);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data © OpenStreetMap contributors'
-}).addTo(simulationMap);
-
-// Drag and Drop Setup
-const dragItems = document.querySelectorAll('.drag-item');
-dragItems.forEach(item => {
-    item.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('id', e.target.id);
-    });
+const liveMap = tt.map({
+    key: apiKey,
+    container: "liveMap",
+    center: puneCenter,
+    zoom: 15,
+    traffic: { flow: true, incidents: true }
 });
+liveMap.addControl(new tt.FullscreenControl());
+liveMap.addControl(new tt.NavigationControl());
 
-simulationMap.getContainer().addEventListener('dragover', (e) => {
-    e.preventDefault();
+// Initialize Optimized Map
+const optimizedMap = tt.map({
+    key: apiKey,
+    container: "optimizedMap",
+    center: puneCenter,
+    zoom: 15,
+    traffic: { flow: true }
 });
+optimizedMap.addControl(new tt.FullscreenControl());
+optimizedMap.addControl(new tt.NavigationControl());
 
-simulationMap.getContainer().addEventListener('drop', (e) => {
-    e.preventDefault();
-    const id = e.dataTransfer.getData('id');
-    const bounds = simulationMap.getBounds();
-    const lat = bounds.getSouth() + (bounds.getNorth() - bounds.getSouth()) * (e.offsetY / simulationMap.getSize().y);
-    const lng = bounds.getWest() + (bounds.getEast() - bounds.getWest()) * (e.offsetX / simulationMap.getSize().x);
+let routeLayer;
 
-    L.marker([lat, lng], {
-        icon: L.icon({
-            iconUrl: document.getElementById(id).src,
-            iconSize: [30, 30],
-        })
-    }).addTo(simulationMap);
-});
+// Suggest Optimized Route
+function suggestOptimizedRoute() {
+    const startPoint = {lat: 18.4781, lng: 73.8904};
+    const endPoint = {lat: 18.4722, lng: 73.8935};
 
-// Button Actions
-function suggestSolutions() {
-    alert("Suggesting traffic optimizations...");
+    tt.services.calculateRoute({
+        key: apiKey,
+        traffic: true,
+        locations: [`${startPoint.lng},${startPoint.lat}:${endPoint.lng},${endPoint.lat}`],
+    })
+    .then(response => {
+        if (routeLayer) {
+            optimizedMap.removeLayer(routeLayer);
+        }
+        const geoJson = response.toGeoJson();
+        routeLayer = new tt.GeoJSONLayer({ geoJson });
+        optimizedMap.addLayer(routeLayer);
+        optimizedMap.fitBounds(routeLayer.getBounds(), { padding: 50 });
+    })
+    .catch(error => console.error(error));
 }
 
-function clearSuggestions() {
-    simulationMap.eachLayer(function (layer) {
-        if (layer instanceof L.Marker) {
-            simulationMap.removeLayer(layer);
-        }
-    });
+// Clear Routes
+function clearRoutes() {
+    if (routeLayer) {
+        optimizedMap.removeLayer(routeLayer);
+        routeLayer = null;
+    }
 }
